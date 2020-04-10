@@ -11,4 +11,4 @@ pluginManagement {
         }
     }
 }
-rootProject.name = 'query-parameter'
+rootProject.name = 'query-parameter-model'
