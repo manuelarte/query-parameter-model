@@ -1,0 +1,151 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id "nebula.facet" version "7.0.8"
+    id 'com.palantir.git-version' version '0.12.3'
+    id 'checkstyle'
+    id 'maven-publish'
+}
+
+ext.versionFile = file('version.properties')
+ext.gitDetails = versionDetails()
+
+ProjectVersion readVersion() {
+    logger.quiet 'Reading version file.'
+
+    if (!versionFile.exists()) {
+        throw new GradleException("Required version file does not exist: $versionFile.canonicalPath")
+    }
+
+    Properties versionProps = new Properties()
+
+    versionFile.withInputStream { stream -> versionProps.load(stream) }
+    def release = Boolean.FALSE
+    if (versionProps.release != null) {
+        release = versionProps.release.toBoolean()
+    } else {
+        if (gitDetails.branchName == 'master') {
+            release = Boolean.TRUE
+        }
+    }
+    new ProjectVersion(versionProps.major.toInteger(), versionProps.minor.toInteger(),
+            versionProps.bugFix.toInteger(), release)
+}
+
+group = 'org.manuel.spring'
+version = readVersion()
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+facets {
+    integrationTest {
+        parentSourceSet = 'main'
+        testTaskName = 'integrationTest'
+        includeInCheckLifecycle = true
+    }
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:28.2-jre'
+    compileOnly 'org.springframework.boot:spring-boot-starter:2.2.6.RELEASE'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.1'
+    testImplementation 'org.json:json:20190722'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.2.0'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.1.13'
+    testImplementation 'org.mutabilitydetector:MutabilityDetector:0.10.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
+
+    integrationTestImplementation('org.springframework.boot:spring-boot-starter-test:2.2.6.RELEASE') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.6.RELEASE'
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-web:2.2.6.RELEASE'
+    integrationTestRuntime 'com.h2database:h2:1.4.200'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+integrationTest {
+    useJUnitPlatform()
+}
+
+class ProjectVersion {
+    Integer major
+    Integer minor
+    Integer bugFix
+    Boolean release
+
+    ProjectVersion(Integer major, Integer minor, Integer bugFix) {
+        this(major, minor, bugFix, Boolean.FALSE)
+    }
+
+    ProjectVersion(Integer major, Integer minor, Integer bugFix, Boolean release) {
+        this.major = major
+        this.minor = minor
+        this.bugFix = bugFix
+        this.release = release
+    }
+
+    @Override
+    String toString() {
+        "$major.$minor.$bugFix${release ? '' : '-SNAPSHOT'}"
+    }
+}
+
+jar {
+    enabled = true
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    archiveClassifier = "sources"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            pom {
+                name = 'Query Parameter Library'
+                description = 'Library to use query parameter'
+                url = 'http://www.example.com/library'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'manuelarte'
+                        name = 'Manuel Doncel Martos'
+                        email = 'manueldoncelmartos@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://example.com/my-library.git'
+                    developerConnection = 'scm:git:ssh://example.com/my-library.git'
+                    url = 'http://example.com/my-library/'
+                }
+            }
+        }
+    }
+}
