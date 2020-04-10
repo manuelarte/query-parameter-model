@@ -40,9 +40,9 @@ public class QueryCriterion<V> {
       return false;
     }
     final QueryCriterion that = (QueryCriterion) o;
-    return Objects.equals(key, that.key) &&
-        Objects.equals(operator, that.operator) &&
-        Objects.equals(value, that.value);
+    return Objects.equals(key, that.key)
+        && Objects.equals(operator, that.operator)
+        && Objects.equals(value, that.value);
   }
 
   @Override

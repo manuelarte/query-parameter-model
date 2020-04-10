@@ -1,14 +1,14 @@
 package org.manuel.spring.queryparameter.operators;
 
 /**
- * @param <V> the expected value, it can be a string, or a collection, range, etc
+ * @param <V> the expected value, it can be a string, or a collection, range, etc.
  */
 public interface Operator<V> {
 
   /**
-   * Return the value already mapped
+   * Return the value already mapped.
    *
-   * @param value
+   * @param value The value in string format
    * @return
    */
   V formatValue(String value);

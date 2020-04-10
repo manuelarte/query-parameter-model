@@ -43,8 +43,8 @@ public class TypeTransformerProvider {
         return false;
       }
       TransformerKey<?> that = (TransformerKey<?>) o;
-      return Objects.equals(entityClass, that.entityClass) &&
-          Objects.equals(criterionKey, that.criterionKey);
+      return Objects.equals(entityClass, that.entityClass)
+          && Objects.equals(criterionKey, that.criterionKey);
     }
 
     @Override

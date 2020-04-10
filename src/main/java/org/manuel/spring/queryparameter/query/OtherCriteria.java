@@ -42,8 +42,8 @@ public class OtherCriteria {
       return false;
     }
     OtherCriteria that = (OtherCriteria) o;
-    return operator == that.operator &&
-        Objects.equals(criteria, that.criteria);
+    return Objects.equals(operator, that.operator)
+        && Objects.equals(criteria, that.criteria);
   }
 
   @Override

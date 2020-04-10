@@ -43,8 +43,8 @@ public final class QueryCriteria {
       return false;
     }
     QueryCriteria that = (QueryCriteria) o;
-    return Objects.equals(criterion, that.criterion) &&
-        Objects.equals(other, that.other);
+    return Objects.equals(criterion, that.criterion)
+        && Objects.equals(other, that.other);
   }
 
   @Override
@@ -65,46 +65,6 @@ public final class QueryCriteria {
     public QueryCriteriaBuilder other(final OtherCriteria other) {
       this.other = other;
       return this;
-    }
-
-    /**
-     * Syntactic sugar for:
-     *
-     * <pre> {@code
-     * .other(OtherCriteria.builder()
-     *     .operator(BooleanOperator.AND)
-     *     .criteria(criteria)
-     *     .build());
-     * }</pre>
-     *
-     * @param criteria
-     * @return
-     */
-    public QueryCriteriaBuilder and(final QueryCriteria criteria) {
-      return this.other(OtherCriteria.builder()
-          .operator(BooleanOperator.AND)
-          .criteria(criteria)
-          .build());
-    }
-
-    /**
-     * Syntactic sugar for:
-     *
-     * <pre> {@code
-     * .other(OtherCriteria.builder()
-     *     .operator(BooleanOperator.OR)
-     *     .criteria(criteria)
-     *     .build());
-     * }</pre>
-     *
-     * @param criteria
-     * @return
-     */
-    public QueryCriteriaBuilder or(final QueryCriteria criteria) {
-      return this.other(OtherCriteria.builder()
-          .operator(BooleanOperator.OR)
-          .criteria(criteria)
-          .build());
     }
 
     public QueryCriteria build() {
