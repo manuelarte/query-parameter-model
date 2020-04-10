@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 
 public class LowerThanOrEqualToOperatorTest {
 
-  private static final Operator<String> LOWER_THAN_OR_EQUALS_OPERATOR = new LowerThanOrEqualsOperator();
+  private static final Operator<String> LOWER_THAN_OR_EQUALS_OPERATOR =
+      new LowerThanOrEqualsOperator();
 
   @Test
   @DisplayName("Testing simple scenario, one integer value")

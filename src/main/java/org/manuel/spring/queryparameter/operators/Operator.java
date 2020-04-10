@@ -1,6 +1,7 @@
 package org.manuel.spring.queryparameter.operators;
 
 /**
+ * Operator interface.
  * @param <V> the expected value, it can be a string, or a collection, range, etc.
  */
 public interface Operator<V> {
