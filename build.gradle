@@ -38,10 +38,9 @@ version = readVersion()
 sourceCompatibility = '1.8'
 
 repositories {
-    mavenLocal()
+    maven { url "https://dl.bintray.com/manueldoncelmartos/query-parameter" }
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
-    maven { url "https://dl.bintray.com/manueldoncelmartos/query-parameter" }
 }
 
 facets {

@@ -4,8 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-/jpa-query-parameter/build
-/jpa-query-parameter/.gradle
 
 ### STS ###
 .apt_generated
