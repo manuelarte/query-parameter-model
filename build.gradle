@@ -18,7 +18,6 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.codearte.nexus-staging' version '0.21.2'
-    id "com.jfrog.bintray" version "1.8.5"
 }
 
 apply plugin: 'com.bmuschko.nexus'
@@ -104,31 +103,6 @@ integrationTest {
 
 jar {
     enabled = true
-}
-
-publishing {
-    publications {
-        BintrayPublication(MavenPublication) {
-            from components.java
-            groupId group
-            artifactId rootProject.name
-            pom {
-                name = 'Query Parameter Library'
-                description = 'Library to use query parameter'
-                url = 'http://www.example.com/library'
-                developers {
-                    developer {
-                        id = 'manuelarte'
-                        name = 'Manuel Doncel Martos'
-                        email = 'manueldoncelmartos@gmail.com'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/manuelarte/query-parameter-model'
-                }
-            }
-        }
-    }
 }
 
 modifyPom {
