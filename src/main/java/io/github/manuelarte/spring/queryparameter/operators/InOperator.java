@@ -8,7 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * In Operator, key:in:(value,value2,value3)
+ * In Operator, key:in:(value,value2,value3).
  */
 @Component
 @Order(InOperator.ORDER)
@@ -36,10 +36,10 @@ public class InOperator implements Operator<List<String>> {
     final String noOperator = afterKey.substring(OPERATOR.length());
 
     final int separatorIndex = Math.min(
-        noOperator.indexOf(BooleanOperator.AND.getSeparator()) == -1 ?
-            Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.AND.getSeparator()),
-        noOperator.indexOf(BooleanOperator.OR.getSeparator()) == -1 ?
-            Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.OR.getSeparator())
+        noOperator.indexOf(BooleanOperator.AND.getSeparator()) == -1
+            ? Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.AND.getSeparator()),
+        noOperator.indexOf(BooleanOperator.OR.getSeparator()) == -1
+            ? Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.OR.getSeparator())
     );
     return separatorIndex == Integer.MAX_VALUE ? noOperator
         : afterKey.substring(OPERATOR.length(), separatorIndex + OPERATOR.length());

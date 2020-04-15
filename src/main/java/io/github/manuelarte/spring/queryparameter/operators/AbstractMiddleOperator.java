@@ -19,10 +19,10 @@ public abstract class AbstractMiddleOperator implements Operator<String> {
     final String noOperator = afterKey.substring(getOperator().length());
 
     final int separatorIndex = Math.min(
-        noOperator.indexOf(BooleanOperator.AND.getSeparator()) == -1 ?
-            Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.AND.getSeparator()),
-        noOperator.indexOf(BooleanOperator.OR.getSeparator()) == -1 ?
-            Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.OR.getSeparator())
+        noOperator.indexOf(BooleanOperator.AND.getSeparator()) == -1
+            ? Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.AND.getSeparator()),
+        noOperator.indexOf(BooleanOperator.OR.getSeparator()) == -1
+            ? Integer.MAX_VALUE : noOperator.indexOf(BooleanOperator.OR.getSeparator())
     );
     return separatorIndex == Integer.MAX_VALUE ? noOperator
         : afterKey.substring(getOperator().length(), separatorIndex + getOperator().length());

@@ -11,7 +11,7 @@ public interface Operator<V> {
    * Return the value already mapped.
    *
    * @param value The value in string format
-   * @return
+   * @return The value formatted
    */
   V formatValue(String value);
 

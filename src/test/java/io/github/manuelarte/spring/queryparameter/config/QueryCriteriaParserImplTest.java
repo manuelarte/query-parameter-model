@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * TODO, move to IT because operators order is important
+ * TODO, move to IT because operators order is important.
  */
 public class QueryCriteriaParserImplTest {
 
@@ -73,7 +73,8 @@ public class QueryCriteriaParserImplTest {
 
   @Test
   void testInstantAndMore() {
-    final String q = "startDate:<=2020-04-12T21:16:01.870+02:00;startDate:>2020-02-12T21:16:01.871+01:00;sport::FOOTBALL|sport::FUTSAL";
+    final String q = "startDate:<=2020-04-12T21:16:01.870+02:00"
+        + ";startDate:>2020-02-12T21:16:01.871+01:00;sport::FOOTBALL|sport::FUTSAL";
     final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = QueryCriteria.builder()

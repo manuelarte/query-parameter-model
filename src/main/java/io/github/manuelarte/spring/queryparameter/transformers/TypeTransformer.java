@@ -3,11 +3,11 @@ package io.github.manuelarte.spring.queryparameter.transformers;
 /**
  * Transform the in parameter to the out parameter.
  *
- * @param <IN>  Can be a String or List<String>
- * @param <OUT> the converted value to the desired type
+ * @param <I>  Can be a String or {@code List<String>}
+ * @param <O> the converted value to the desired type
  */
-public interface TypeTransformer<IN, OUT> {
+public interface TypeTransformer<I, O> {
 
-  OUT transformValue(Class<?> entity, String criterionKey, IN value);
+  O transformValue(Class<?> entity, String criterionKey, I value);
 
 }

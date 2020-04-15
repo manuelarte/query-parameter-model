@@ -5,7 +5,7 @@ import io.github.manuelarte.spring.queryparameter.transformers.TypeTransformer;
 public class TypeTransformerProvider {
 
   /**
-   * Change this map to a predicate, and then we filter based on the transformer key
+   * Change this map to a predicate, and then we filter based on the transformer key.
    **/
   private final TypeTransformerRegistry registry;
   private final TypeTransformer defaultTransformer;
