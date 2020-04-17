@@ -8,8 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added operators Equals, LowerThanOrEquals, LowerThan, GreaterThanOrEquals, GreaterThan, In.
-
 ### Changed
 
+
 ### Removed
+
+## [0.0.1] - 2020-17-04
+
+### Added
+
+- Added operators Equals, LowerThanOrEquals, LowerThan, GreaterThanOrEquals, GreaterThan, In.
