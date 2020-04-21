@@ -13,13 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 
 @Configuration
+@lombok.RequiredArgsConstructor
 public class QueryCriteriaConfig {
 
   private final List<QueryParameterConfig> queryParameterConfigs;
-
-  public QueryCriteriaConfig(final List<QueryParameterConfig> queryParameterConfigs) {
-    this.queryParameterConfigs = queryParameterConfigs;
-  }
 
   @Bean
   @ConditionalOnMissingBean

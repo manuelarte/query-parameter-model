@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@lombok.EqualsAndHashCode
+@lombok.Builder(toBuilder = true)
 public final class QueryCriteria {
 
   private final QueryCriterion<?> criterion;
@@ -40,44 +42,7 @@ public final class QueryCriteria {
     return Optional.ofNullable(other);
   }
 
-  public QueryCriteriaBuilder toBuilder() {
-    return new QueryCriteriaBuilder()
-        .criterion(criterion)
-        .other(other);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    QueryCriteria that = (QueryCriteria) o;
-    return Objects.equals(criterion, that.criterion)
-        && Objects.equals(other, that.other);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(criterion, other);
-  }
-
   public static class QueryCriteriaBuilder {
-
-    private QueryCriterion criterion;
-    private OtherCriteria other;
-
-    public QueryCriteriaBuilder criterion(final QueryCriterion criterion) {
-      this.criterion = criterion;
-      return this;
-    }
-
-    public QueryCriteriaBuilder other(final OtherCriteria other) {
-      this.other = other;
-      return this;
-    }
 
     /**
      * Concatenate 'and' to the next available OtherCriteria.
@@ -107,10 +72,6 @@ public final class QueryCriteria {
         final QueryCriteria build = this.other.getCriteria().toBuilder().or(criterion).build();
         return other(this.other.toBuilder().criteria(build).build());
       }
-    }
-
-    public QueryCriteria build() {
-      return new QueryCriteria(criterion, other);
     }
 
     @Override

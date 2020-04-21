@@ -11,15 +11,12 @@ import io.github.manuelarte.spring.queryparameter.query.QueryCriteria;
 import io.github.manuelarte.spring.queryparameter.query.QueryCriterion;
 import java.util.List;
 
+@lombok.RequiredArgsConstructor
 public class QueryCriteriaParserImpl implements QueryCriteriaParser {
 
   private static final char OPERATOR_START = ':';
 
   private final List<Operator<?>> operators;
-
-  public QueryCriteriaParserImpl(final List<Operator<?>> operators) {
-    this.operators = operators;
-  }
 
   @Override
   public QueryCriteria parse(final String queryCriteria, final QueryCriteriaParserContext context) {

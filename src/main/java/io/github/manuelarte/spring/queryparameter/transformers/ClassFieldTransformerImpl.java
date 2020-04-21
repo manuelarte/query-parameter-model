@@ -3,13 +3,10 @@ package io.github.manuelarte.spring.queryparameter.transformers;
 import io.github.manuelarte.spring.queryparameter.exceptions.QueryParserException;
 import org.springframework.core.convert.ConversionService;
 
+@lombok.AllArgsConstructor
 public class ClassFieldTransformerImpl<V> implements TypeTransformer<Object, V> {
 
   private final ConversionService conversionService;
-
-  public ClassFieldTransformerImpl(final ConversionService conversionService) {
-    this.conversionService = conversionService;
-  }
 
   @Override
   public V transformValue(final Class<?> entity, final String criterionKey,
