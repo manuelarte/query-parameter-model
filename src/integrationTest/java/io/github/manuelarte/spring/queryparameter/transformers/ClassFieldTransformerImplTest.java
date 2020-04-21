@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class ClassFieldTransformerImplTest {
 
   @Autowired
+  @Qualifier(("defaultTypeTransformer"))
   private ClassFieldTransformerImpl classFieldTransformer;
 
   @Test

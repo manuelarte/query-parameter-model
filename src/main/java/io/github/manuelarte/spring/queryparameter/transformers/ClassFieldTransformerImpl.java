@@ -2,9 +2,7 @@ package io.github.manuelarte.spring.queryparameter.transformers;
 
 import io.github.manuelarte.spring.queryparameter.exceptions.QueryParserException;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ClassFieldTransformerImpl<V> implements TypeTransformer<Object, V> {
 
   private final ConversionService conversionService;
