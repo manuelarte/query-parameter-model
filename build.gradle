@@ -73,7 +73,9 @@ configurations {
 }
 
 dependencies {
+    implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'com.google.guava:guava:28.2-jre'
+    compileOnly 'org.springframework.boot:spring-boot-starter-web:2.2.6.RELEASE'
     compileOnly 'org.springframework.boot:spring-boot-starter:2.2.6.RELEASE'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
@@ -153,15 +155,4 @@ nexus {
 nexusStaging {
     packageGroup = "io.github.manuelarte.spring" //optional if packageGroup == project.getGroup()
     // stagingProfileId = "yourStagingProfileId" //when not defined will be got from server using "packageGroup"
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
 }
