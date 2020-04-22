@@ -10,9 +10,8 @@ package io.github.manuelarte.spring.queryparameter.query;
  * </p>
  */
 @lombok.AllArgsConstructor
-@lombok.Getter
+@lombok.Data
 @lombok.Builder(toBuilder = true)
-@lombok.EqualsAndHashCode
 public class OtherCriteria {
 
   private final BooleanOperator operator;

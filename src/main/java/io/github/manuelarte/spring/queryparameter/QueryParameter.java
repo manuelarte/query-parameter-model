@@ -14,6 +14,8 @@ public @interface QueryParameter {
 
   String paramName() default "q";
 
+  Class<?>[] groups() default {};
+
   String[] allowedKeys() default {};
 
   String[] notAllowedKeys() default {};

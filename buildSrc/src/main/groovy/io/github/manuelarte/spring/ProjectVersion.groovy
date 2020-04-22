@@ -1,5 +1,7 @@
 package io.github.manuelarte.spring
 
+import org.gradle.api.GradleException
+
 class ProjectVersion {
     Integer major
     Integer minor
@@ -15,6 +17,21 @@ class ProjectVersion {
         this.minor = minor
         this.bugFix = bugFix
         this.release = release
+    }
+
+    static ProjectVersion readVersion(File versionFile, gitDetails) {
+        Properties versionProps = new Properties()
+        versionFile.withInputStream { stream -> versionProps.load(stream) }
+        def release = Boolean.FALSE
+        if (versionProps.release != null) {
+            release = versionProps.release.toBoolean()
+        } else {
+            if (gitDetails.branchName == 'master') {
+                release = Boolean.TRUE
+            }
+        }
+        new ProjectVersion(versionProps.major.toInteger(), versionProps.minor.toInteger(),
+                versionProps.bugFix.toInteger(), release)
     }
 
     @Override

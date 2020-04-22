@@ -4,6 +4,7 @@ import io.github.manuelarte.spring.queryparameter.QueryParameter;
 import io.github.manuelarte.spring.queryparameter.config.QueryCriteriaParser;
 import io.github.manuelarte.spring.queryparameter.exceptions.QueryParserException;
 import io.github.manuelarte.spring.queryparameter.query.QueryCriteria;
+import io.github.manuelarte.spring.queryparameter.query.validations.EntityValidation;
 import io.github.manuelarte.spring.queryparameter.transformers.QueryCriteriaTransformer;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
@@ -11,6 +12,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -40,10 +43,17 @@ public class QueryParameterArgumentResolver implements HandlerMethodArgumentReso
 
     final String q = request.getParameter(queryParameter.paramName());
     if (q != null && !q.isEmpty()) {
-      final Class<?> documentEntity = queryParameter.entity();
+      final Class<?> entityClass = queryParameter.entity();
       final QueryCriteriaParserContext context = createContext(queryParameter);
       final QueryCriteria queryCriteria = queryCriteriaParser.parse(q, context);
-      final Object query = queryCriteriaTransformer.apply(documentEntity, queryCriteria);
+
+      final Set<ConstraintViolation<Object>> constraints = new EntityValidation(queryCriteria, entityClass)
+          .validate(queryParameter.groups());
+      if (!constraints.isEmpty()) {
+        throw new ConstraintViolationException(constraints);
+      }
+
+      final Object query = queryCriteriaTransformer.apply(entityClass, queryCriteria);
       if (queryCriteriaTransformer.supports(parameter.getParameterType())) {
         return query;
       } else if (isValidOptional(parameter)) {

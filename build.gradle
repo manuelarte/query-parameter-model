@@ -27,24 +27,10 @@ ext.gitDetails = versionDetails()
 
 ProjectVersion readVersion() {
     logger.quiet 'Reading version file.'
-
     if (!versionFile.exists()) {
         throw new GradleException("Required version file does not exist: $versionFile.canonicalPath")
     }
-
-    Properties versionProps = new Properties()
-
-    versionFile.withInputStream { stream -> versionProps.load(stream) }
-    def release = Boolean.FALSE
-    if (versionProps.release != null) {
-        release = versionProps.release.toBoolean()
-    } else {
-        if (gitDetails.branchName == 'master') {
-            release = Boolean.TRUE
-        }
-    }
-    new ProjectVersion(versionProps.major.toInteger(), versionProps.minor.toInteger(),
-            versionProps.bugFix.toInteger(), release)
+    ProjectVersion.readVersion(versionFile, gitDetails)
 }
 
 group = 'io.github.manuelarte.spring'
