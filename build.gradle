@@ -27,24 +27,10 @@ ext.gitDetails = versionDetails()
 
 ProjectVersion readVersion() {
     logger.quiet 'Reading version file.'
-
     if (!versionFile.exists()) {
         throw new GradleException("Required version file does not exist: $versionFile.canonicalPath")
     }
-
-    Properties versionProps = new Properties()
-
-    versionFile.withInputStream { stream -> versionProps.load(stream) }
-    def release = Boolean.FALSE
-    if (versionProps.release != null) {
-        release = versionProps.release.toBoolean()
-    } else {
-        if (gitDetails.branchName == 'master') {
-            release = Boolean.TRUE
-        }
-    }
-    new ProjectVersion(versionProps.major.toInteger(), versionProps.minor.toInteger(),
-            versionProps.bugFix.toInteger(), release)
+    ProjectVersion.readVersion(versionFile, gitDetails)
 }
 
 group = 'io.github.manuelarte.spring'
@@ -73,7 +59,9 @@ configurations {
 }
 
 dependencies {
+    implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'com.google.guava:guava:28.2-jre'
+    compileOnly 'org.springframework.boot:spring-boot-starter-web:2.2.6.RELEASE'
     compileOnly 'org.springframework.boot:spring-boot-starter:2.2.6.RELEASE'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
@@ -83,6 +71,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.3.3'
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.1.13'
     testImplementation 'org.mutabilitydetector:MutabilityDetector:0.10.3'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
 
     integrationTestImplementation('org.springframework.boot:spring-boot-starter-test:2.2.6.RELEASE') {
@@ -151,4 +141,15 @@ nexus {
 nexusStaging {
     packageGroup = "io.github.manuelarte.spring" //optional if packageGroup == project.getGroup()
     // stagingProfileId = "yourStagingProfileId" //when not defined will be got from server using "packageGroup"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
 }

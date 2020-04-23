@@ -2,12 +2,17 @@ package io.github.manuelarte.spring.queryparameter.query;
 
 import com.google.common.base.Preconditions;
 import io.github.manuelarte.spring.queryparameter.operators.Operator;
-import java.util.Objects;
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import lombok.val;
 
-public final class QueryCriteria {
+@lombok.EqualsAndHashCode
+@lombok.ToString
+@lombok.Builder(toBuilder = true)
+public final class QueryCriteria implements Iterable<QueryCriterion<Object>> {
 
   private final QueryCriterion<?> criterion;
   private final OtherCriteria other;
@@ -40,44 +45,60 @@ public final class QueryCriteria {
     return Optional.ofNullable(other);
   }
 
-  public QueryCriteriaBuilder toBuilder() {
-    return new QueryCriteriaBuilder()
-        .criterion(criterion)
-        .other(other);
+  @Override
+  public Iterator<QueryCriterion<Object>> iterator() {
+    return new QueryCriteriaIterator(this);
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    QueryCriteria that = (QueryCriteria) o;
-    return Objects.equals(criterion, that.criterion)
-        && Objects.equals(other, that.other);
+  public void forEach(Consumer<? super QueryCriterion<Object>> action) {
+    new QueryCriteriaIterator(this).forEachRemaining(action);
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(criterion, other);
+  public static class QueryCriteriaIterator implements Iterator<QueryCriterion<Object>> {
+
+    private final QueryCriteria queryCriteria;
+    private int position = 0;
+
+    public QueryCriteriaIterator(final QueryCriteria queryCriteria) {
+      this.queryCriteria = queryCriteria;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return getNext(position).isPresent();
+    }
+
+    @Override
+    public QueryCriterion<Object> next() {
+      val toReturn = getNext(position).get();
+      position++;
+      return toReturn;
+    }
+
+    private Optional<QueryCriterion<Object>> getNext(final int index) {
+      int accIndex = 0;
+      if (index == 0) {
+        return Optional.of(queryCriteria.getCriterion());
+      } else {
+        QueryCriteria acc = this.queryCriteria;
+        Optional<OtherCriteria> otherCriteria = Optional.empty();
+        while (accIndex < index) {
+          if (acc.getOther().isPresent()) {
+            otherCriteria = acc.getOther();
+            acc = otherCriteria.get().getCriteria();
+            accIndex++;
+          } else {
+            return Optional.empty();
+          }
+        }
+        return otherCriteria.map(it -> it.getCriteria().getCriterion());
+      }
+    }
+
   }
 
   public static class QueryCriteriaBuilder {
-
-    private QueryCriterion criterion;
-    private OtherCriteria other;
-
-    public QueryCriteriaBuilder criterion(final QueryCriterion criterion) {
-      this.criterion = criterion;
-      return this;
-    }
-
-    public QueryCriteriaBuilder other(final OtherCriteria other) {
-      this.other = other;
-      return this;
-    }
 
     /**
      * Concatenate 'and' to the next available OtherCriteria.
@@ -85,7 +106,7 @@ public final class QueryCriteria {
      * @param criterion The criterion to apply.
      * @return the builder.
      */
-    public QueryCriteriaBuilder and(final QueryCriterion criterion) {
+    public QueryCriteriaBuilder and(final QueryCriterion<?> criterion) {
       if (this.other == null) {
         return other(new OtherCriteria(BooleanOperator.AND, new QueryCriteria(criterion)));
       } else {
@@ -100,17 +121,13 @@ public final class QueryCriteria {
      * @param criterion The criterion to apply.
      * @return the builder.
      */
-    public QueryCriteriaBuilder or(final QueryCriterion criterion) {
+    public QueryCriteriaBuilder or(final QueryCriterion<?> criterion) {
       if (this.other == null) {
         return other(new OtherCriteria(BooleanOperator.OR, new QueryCriteria(criterion)));
       } else {
         final QueryCriteria build = this.other.getCriteria().toBuilder().or(criterion).build();
         return other(this.other.toBuilder().criteria(build).build());
       }
-    }
-
-    public QueryCriteria build() {
-      return new QueryCriteria(criterion, other);
     }
 
     @Override

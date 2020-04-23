@@ -1,0 +1,56 @@
+=== Constraints
+
+==== Keys filtering
+
+It's possible to filter the keys that are allow or not allow to be queried (by default every key is allowed).
+As an example, if I only want to query by firstName and lastName
+[source,java]
+----
+@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<List<Entity>> findByQuerying(@QueryParameter(entity = Entity.class, allowedKeys={"firstName", "lastName"}) Specification<Entity> query) {
+  return ResponseEntity.ok(entityService.findAll(query));
+}
+----
+Or if only want to not allow createdBy field
+[source,java]
+----
+@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<List<Entity>> findByQuerying(@QueryParameter(entity = Entity.class, notAllowedKeys="createdBy") Specification<Entity> query) {
+  return ResponseEntity.ok(entityService.findAll(query));
+}
+----
+
+Then the parser will throw a QueryParserException if finds a not allowed key.
+
+==== Annotation Constraints
+
+===== @QueryParamNotNull
+
+Annotation that can be used at a field level, to check that that field has to be present.
+
+[source,java]
+----
+public class ExampleDto {
+  private final String firstName;
+  @QueryParamNotNull
+  private final String lastName;
+}
+----
+
+In the above example, when querying that entity, the lastName key has to be present.
+
+===== @QueryParamNull
+
+Annotation that can be used at a field level, to check that that field can't be queried.
+
+[source,java]
+----
+public class ExampleDto {
+  private final String firstName;
+  @QueryParamNull
+  private final String lastName;
+}
+----
+
+In the above example, when querying that entity, the lastName key can't be present.
+

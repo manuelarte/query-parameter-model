@@ -4,17 +4,12 @@ import com.google.common.base.Preconditions;
 import io.github.manuelarte.spring.queryparameter.query.BooleanOperator;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * In Operator, key:in:(value,value2,value3).
  */
-@Component
-@Order(InOperator.ORDER)
+@lombok.EqualsAndHashCode
 public class InOperator implements Operator<List<String>> {
-
-  public static final int ORDER = GreaterThanOperator.ORDER + 10;
 
   private static final String OPERATOR = ":in:";
 
@@ -50,16 +45,6 @@ public class InOperator implements Operator<List<String>> {
     return OPERATOR.equals(afterKey.substring(0, OPERATOR.length()))
         && afterKey.charAt(OPERATOR.length()) == '('
         && afterKey.substring(OPERATOR.length() + 1).contains(")");
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    return this == o || o instanceof InOperator;
-  }
-
-  @Override
-  public int hashCode() {
-    return InOperator.class.hashCode();
   }
 
 }

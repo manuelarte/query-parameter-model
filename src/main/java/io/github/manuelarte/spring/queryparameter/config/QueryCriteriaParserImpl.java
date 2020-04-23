@@ -11,23 +11,20 @@ import io.github.manuelarte.spring.queryparameter.query.QueryCriteria;
 import io.github.manuelarte.spring.queryparameter.query.QueryCriterion;
 import java.util.List;
 
+@lombok.RequiredArgsConstructor
 public class QueryCriteriaParserImpl implements QueryCriteriaParser {
 
   private static final char OPERATOR_START = ':';
 
   private final List<Operator<?>> operators;
 
-  public QueryCriteriaParserImpl(final List<Operator<?>> operators) {
-    this.operators = operators;
-  }
-
   @Override
   public QueryCriteria parse(final String queryCriteria, final QueryCriteriaParserContext context) {
     Preconditions.checkArgument(queryCriteria != null,
         "Can't parse a null query criteria");
-    String key = "";
+    String key;
     Operator<?> operator;
-    String value = "";
+    String value;
     final int operatorStart = queryCriteria.indexOf(OPERATOR_START);
     if (operatorStart > 0) {
       key = queryCriteria.substring(0, operatorStart);

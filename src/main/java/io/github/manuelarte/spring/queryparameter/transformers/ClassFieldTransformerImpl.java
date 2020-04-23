@@ -2,18 +2,14 @@ package io.github.manuelarte.spring.queryparameter.transformers;
 
 import io.github.manuelarte.spring.queryparameter.exceptions.QueryParserException;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Component;
 
-@Component
+@lombok.AllArgsConstructor
 public class ClassFieldTransformerImpl<V> implements TypeTransformer<Object, V> {
 
   private final ConversionService conversionService;
 
-  public ClassFieldTransformerImpl(final ConversionService conversionService) {
-    this.conversionService = conversionService;
-  }
-
   @Override
+  @SuppressWarnings("unchecked")
   public V transformValue(final Class<?> entity, final String criterionKey,
       final Object value) {
     try {

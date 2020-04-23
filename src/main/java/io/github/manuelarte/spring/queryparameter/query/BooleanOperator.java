@@ -6,6 +6,7 @@ import java.util.Optional;
 public enum BooleanOperator {
   AND(';'), OR('|');
 
+  @lombok.Getter
   private final char separator;
 
   BooleanOperator(final char separator) {
@@ -16,7 +17,4 @@ public enum BooleanOperator {
     return Arrays.stream(values()).filter(it -> it.separator == separator).findFirst();
   }
 
-  public char getSeparator() {
-    return this.separator;
-  }
 }

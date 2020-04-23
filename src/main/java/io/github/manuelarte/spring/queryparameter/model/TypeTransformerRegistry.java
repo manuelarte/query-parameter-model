@@ -15,6 +15,7 @@ public class TypeTransformerRegistry {
     this.map = new HashMap<>();
   }
 
+  @SuppressWarnings("unused")
   public <V> void addTransformer(final Class<V> entityClazz, final String criterionKey,
       final TypeTransformer typeTransformer) {
     this.map.put(new TransformerKey<>(entityClazz, criterionKey), typeTransformer);
