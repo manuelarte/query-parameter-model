@@ -8,7 +8,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Payload;
-import javax.validation.constraints.NotNull;
 
 /**
  * Annotation to indicates that the key is mandatory in the query param

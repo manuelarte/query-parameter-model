@@ -27,6 +27,9 @@ import org.hibernate.validator.cfg.defs.NullDef;
 import org.hibernate.validator.internal.cfg.context.DefaultConstraintMapping;
 import org.springframework.util.ReflectionUtils;
 
+/**
+ * Validator based on the annotations attached in the entity.
+ */
 public class EntityValidation {
 
   private final QueryCriteria queryCriteria;
@@ -48,9 +51,8 @@ public class EntityValidation {
       }
       if (field.getAnnotation(QueryParamNotNull.List.class) != null) {
         final QueryParamNotNull.List notNulls = field.getAnnotation(QueryParamNotNull.List.class);
-        Arrays.stream(notNulls.value()).forEach(an -> {
-          constraints.addAll(applyConstraintsValidation(field, notNullDef(field, an), groups));
-        });
+        Arrays.stream(notNulls.value()).forEach(
+            an -> constraints.addAll(applyConstraintsValidation(field, notNullDef(field, an), groups)));
       }
       if (field.getAnnotation(QueryParamNull.class) != null) {
         final QueryParamNull nullAn = field.getAnnotation(QueryParamNull.class);
@@ -84,9 +86,8 @@ public class EntityValidation {
       final ConstraintDef<?, ?> constraint, final Class<?>... groups) {
     final Set<ConstraintViolation<Object>> constraints = new HashSet<>();
     val criteriaOfKeys = getCriterionOfKeys(field.getName());
-    criteriaOfKeys.forEach(qC -> {
-      constraints.addAll(applyValidation(Collections.singletonList(constraint), qC, groups));
-    });
+    criteriaOfKeys.forEach(criterion -> constraints.addAll(applyValidation(
+        Collections.singletonList(constraint), criterion, groups)));
     return constraints;
   }
 
