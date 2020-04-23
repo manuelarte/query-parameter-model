@@ -37,12 +37,28 @@ Below an example to match firstName == Manuel
 GET /entities?q=firstName::Manuel
 ----
 
+=== Not Equals (:!:)
+
+Below an example to match firstName != Manuel
+[source,bash]
+----
+GET /entities?q=firstName:!:Manuel
+----
+
 === Lower than (:<)
 
 Below an example to match age < 18
 [source,bash]
 ----
 GET /entities?q=age:<18
+----
+
+=== Not Lower than (:!<)
+
+Below an example to match age not lower than 18
+[source,bash]
+----
+GET /entities?q=age:!<18
 ----
 
 === Lower than or equal (:<=)
@@ -53,12 +69,28 @@ Below an example to match age <= 18
 GET /entities?q=age:<=18
 ----
 
+=== Not Lower than or equal (:<!=)
+
+Below an example to match age not lower than or equals 18
+[source,bash]
+----
+GET /entities?q=age:<!=18
+----
+
 === Greater than (:>)
 
 Below an example to match age > 18
 [source,bash]
 ----
 GET /entities?q=age:>18
+----
+
+=== Not Greater than (:!>)
+
+Below an example to match age not greater than 18
+[source,bash]
+----
+GET /entities?q=age:!>18
 ----
 
 === Greater than or equal (:>=)
@@ -69,12 +101,28 @@ Below an example to match age >= 18
 GET /entities?q=age:>=18
 ----
 
+=== Not Greater than or equal (:!>=)
+
+Below an example to match age not greater than or equals to 18
+[source,bash]
+----
+GET /entities?q=age:!>=18
+----
+
 === In (:in:(xxx,yyy,...))
 
 Below an example get gender in MALE and FEMALE
 [source,bash]
 ----
 GET /entities?q=gender:in:(MALE,FEMALE)
+----
+
+=== Not In (:!in:(xxx,yyy,...))
+
+Below an example get gender that are not MALE or FEMALE
+[source,bash]
+----
+GET /entities?q=gender:!in:(MALE,FEMALE)
 ----
 
 == Concatenate params

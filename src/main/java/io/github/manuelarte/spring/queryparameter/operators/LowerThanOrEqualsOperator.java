@@ -1,14 +1,7 @@
 package io.github.manuelarte.spring.queryparameter.operators;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-@Component
-@Order(LowerThanOrEqualsOperator.ORDER)
-@lombok.EqualsAndHashCode
+@lombok.EqualsAndHashCode(callSuper = true)
 public class LowerThanOrEqualsOperator extends AbstractMiddleOperator {
-
-  public static final int ORDER = EqualsOperator.ORDER + 10;
 
   private static final String OPERATOR = ":<=";
 

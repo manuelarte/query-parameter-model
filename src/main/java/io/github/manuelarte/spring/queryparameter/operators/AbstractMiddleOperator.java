@@ -3,6 +3,7 @@ package io.github.manuelarte.spring.queryparameter.operators;
 import com.google.common.base.Preconditions;
 import io.github.manuelarte.spring.queryparameter.query.BooleanOperator;
 
+@lombok.EqualsAndHashCode
 public abstract class AbstractMiddleOperator implements Operator<String> {
 
   abstract String getOperator();

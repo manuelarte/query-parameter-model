@@ -12,12 +12,13 @@ import io.github.manuelarte.spring.queryparameter.operators.GreaterThanOrEqualsO
 import io.github.manuelarte.spring.queryparameter.operators.InOperator;
 import io.github.manuelarte.spring.queryparameter.operators.LowerThanOperator;
 import io.github.manuelarte.spring.queryparameter.operators.LowerThanOrEqualsOperator;
+import io.github.manuelarte.spring.queryparameter.operators.NotAbstractMiddleOperatorOperator;
+import io.github.manuelarte.spring.queryparameter.operators.NotInOperator;
 import io.github.manuelarte.spring.queryparameter.operators.Operator;
 import io.github.manuelarte.spring.queryparameter.query.BooleanOperator;
 import io.github.manuelarte.spring.queryparameter.query.OtherCriteria;
 import io.github.manuelarte.spring.queryparameter.query.QueryCriteria;
 import io.github.manuelarte.spring.queryparameter.query.QueryCriterion;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -30,6 +31,8 @@ import org.junit.jupiter.params.provider.MethodSource;
  * TODO, move to IT because operators order is important.
  */
 public class QueryCriteriaParserImplTest {
+
+  private static final List<Operator<?>> OPERATORS = new OperatorConfig().operators();
 
   private static Stream<Arguments> parseCases() {
     return Stream.of(
@@ -56,17 +59,47 @@ public class QueryCriteriaParserImplTest {
   @Test
   void testEquals() {
     final String q = "key::value";
-    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = new QueryCriteria(new QueryCriterion<>("key",
         new EqualsOperator(), "value"));
     assertEquals(expected, parsed);
   }
 
+  @Test
+  void testNotEquals() {
+    final String q = "key:!:value";
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
+    final QueryCriteria parsed = parser.parse(q);
+    final QueryCriteria expected = new QueryCriteria(new QueryCriterion<>("key",
+        new NotAbstractMiddleOperatorOperator(new EqualsOperator()), "value"));
+    assertEquals(expected, parsed);
+  }
+
+  @Test
+  void testNotGreaterThan() {
+    final String q = "key:!>value";
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
+    final QueryCriteria parsed = parser.parse(q);
+    final QueryCriteria expected = new QueryCriteria(new QueryCriterion<>("key",
+        new NotAbstractMiddleOperatorOperator(new GreaterThanOperator()), "value"));
+    assertEquals(expected, parsed);
+  }
+
+  @Test
+  void testNotGreaterOrEqualThan() {
+    final String q = "key:!>=value";
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
+    final QueryCriteria parsed = parser.parse(q);
+    final QueryCriteria expected = new QueryCriteria(new QueryCriterion<>("key",
+        new NotAbstractMiddleOperatorOperator(new GreaterThanOrEqualsOperator()), "value"));
+    assertEquals(expected, parsed);
+  }
+
   @ParameterizedTest
   @MethodSource("parseCases")
   void parseCasesTest(final String q, final QueryCriteria expected) {
-    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
     final QueryCriteria parsed = parser.parse(q);
     assertEquals(expected, parsed);
   }
@@ -75,7 +108,7 @@ public class QueryCriteriaParserImplTest {
   void testInstantAndMore() {
     final String q = "startDate:<=2020-04-12T21:16:01.870+02:00"
         + ";startDate:>2020-02-12T21:16:01.871+01:00;sport::FOOTBALL|sport::FUTSAL";
-    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = QueryCriteria.builder()
         .criterion(new QueryCriterion<>("startDate", new LowerThanOrEqualsOperator(),
@@ -91,7 +124,7 @@ public class QueryCriteriaParserImplTest {
   @Test
   void testInOperator() {
     final String q = "sport:in:(FOOTBALL,FUTSAL)";
-    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = QueryCriteria.builder()
         .criterion(
@@ -101,11 +134,21 @@ public class QueryCriteriaParserImplTest {
   }
 
   @Test
+  void testNotIn() {
+    final String q = "key:!in:(value1,value2)";
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
+    final QueryCriteria actual = parser.parse(q);
+    final QueryCriteria expected = new QueryCriteria(new QueryCriterion<>("key",
+        new NotInOperator(new InOperator()), Arrays.asList("value1", "value2")));
+    assertEquals(expected, actual);
+  }
+
+  @Test
   void testInstantAndIn() {
     final String q =
         "startDate:<=2020-04-12T21:16:01.870+02:00;startDate:>2020-02-12T21:16:01.871+01:00"
             + ";sport:in:(FOOTBALL,FUTSAL)";
-    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = QueryCriteria.builder()
         .criterion(new QueryCriterion<>("startDate", new LowerThanOrEqualsOperator(),
@@ -122,21 +165,10 @@ public class QueryCriteriaParserImplTest {
     final String q =
         "startDate:<=2020-04-12T21:16:01.870+02:00;startDate:>2020-02-12T21:16:01.871+01:00"
             + ";sport:in:(FOOTBALL,FUTSAL)";
-    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
+    final QueryCriteriaParser parser = new QueryCriteriaParserImpl(OPERATORS);
     final QueryCriteriaParserContext context = new QueryCriteriaParserContext(
         null, Sets.newHashSet("startDate"));
     assertThrows(QueryParserException.class, () -> parser.parse(q, context));
-  }
-
-  private List<Operator<?>> getAllOperators() {
-    final List<Operator<?>> operators = new ArrayList<>();
-    operators.add(new EqualsOperator());
-    operators.add(new GreaterThanOrEqualsOperator());
-    operators.add(new GreaterThanOperator());
-    operators.add(new LowerThanOrEqualsOperator());
-    operators.add(new LowerThanOperator());
-    operators.add(new InOperator());
-    return operators;
   }
 
 }
