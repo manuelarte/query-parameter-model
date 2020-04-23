@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.manuelarte.spring.queryparameter.operators.EqualsOperator;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.StreamSupport;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 

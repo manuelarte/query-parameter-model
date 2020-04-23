@@ -27,19 +27,17 @@ public class QueryCriteriaConfig {
   }
 
   @Bean("defaultTypeTransformer")
-  public TypeTransformer defaultTypeTransformer(final ConversionService conversionService) {
+  public TypeTransformer<?, ?> defaultTypeTransformer(final ConversionService conversionService) {
     return new ClassFieldTransformerImpl(conversionService);
   }
 
   @Bean
   @ConditionalOnMissingBean
   public TypeTransformerProvider typeTransformerProvider(
-      @Qualifier("defaultTypeTransformer") final TypeTransformer typeTransformer,
+      @Qualifier("defaultTypeTransformer") final TypeTransformer<?, ?> typeTransformer,
       final TypeTransformerRegistry typeTransformerRegistry) {
     queryParameterConfigs.forEach(it -> it.addTypeTransformer(typeTransformerRegistry));
-    final TypeTransformerProvider typeTransformerProvider =
-        new TypeTransformerProvider(typeTransformerRegistry, typeTransformer);
-    return typeTransformerProvider;
+    return new TypeTransformerProvider(typeTransformerRegistry, typeTransformer);
   }
 
 }

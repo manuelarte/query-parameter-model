@@ -1,6 +1,26 @@
 === Constraints
 
-Here are the validation constraints that can be used for the Query Parameter.
+==== Keys filtering
+
+It's possible to filter the keys that are allow or not allow to be queried (by default every key is allowed).
+As an example, if I only want to query by firstName and lastName
+[source,java]
+----
+@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<List<Entity>> findByQuerying(@QueryParameter(entity = Entity.class, allowedKeys={"firstName", "lastName"}) Specification<Entity> query) {
+  return ResponseEntity.ok(entityService.findAll(query));
+}
+----
+Or if only want to not allow createdBy field
+[source,java]
+----
+@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<List<Entity>> findByQuerying(@QueryParameter(entity = Entity.class, notAllowedKeys="createdBy") Specification<Entity> query) {
+  return ResponseEntity.ok(entityService.findAll(query));
+}
+----
+
+Then the parser will throw a QueryParserException if finds a not allowed key.
 
 ==== Annotation Constraints
 

@@ -60,9 +60,8 @@ public class EntityValidation {
       }
       if (field.getAnnotation(QueryParamNull.List.class) != null) {
         final QueryParamNull.List nulls = field.getAnnotation(QueryParamNull.List.class);
-        Arrays.stream(nulls.value()).forEach(an -> {
-          constraints.addAll(applyConstraintsValidation(field, nullDef(field, an), groups));
-        });
+        Arrays.stream(nulls.value()).forEach(an ->
+            constraints.addAll(applyConstraintsValidation(field, nullDef(field, an), groups)));
       }
     });
     return constraints;
@@ -98,7 +97,7 @@ public class EntityValidation {
     final ConstraintMapping mapping = new DefaultConstraintMapping();
     val value = mapping.type(queryCriterion.getClass())
         .property("value", ElementType.FIELD);
-    definitions.forEach(it -> value.constraint(it));
+    definitions.forEach(value::constraint);
     val config = Validation.byProvider(HibernateValidator.class).configure();
     config.addMapping(mapping);
     val factory = config.buildValidatorFactory();

@@ -9,6 +9,7 @@ public class ClassFieldTransformerImpl<V> implements TypeTransformer<Object, V> 
   private final ConversionService conversionService;
 
   @Override
+  @SuppressWarnings("unchecked")
   public V transformValue(final Class<?> entity, final String criterionKey,
       final Object value) {
     try {

@@ -27,7 +27,7 @@ public class OperatorQueryProviderImpl<T extends OperatorQuery<?, Q>, Q>
   @Override
   public T getOperatorQuery(final Class<?> entity,
       final String criterionKey, final Operator<Object> operator) {
-    final OperatorQueryEntry operatorQueryEntry = operatorPredicateEntries.stream()
+    final OperatorQueryEntry<OperatorQuery<?, Q>, Q> operatorQueryEntry = operatorPredicateEntries.stream()
         .filter(o -> o.predicate.test(entity, criterionKey, operator)).findFirst()
         .orElseThrow(() -> new RuntimeException("query param operator provider not found"));
     return (T) operatorQueryEntry.operatorPredicate;

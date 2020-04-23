@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(InOperator.ORDER)
+@lombok.EqualsAndHashCode
 public class InOperator implements Operator<List<String>> {
 
   public static final int ORDER = GreaterThanOperator.ORDER + 10;
@@ -50,16 +51,6 @@ public class InOperator implements Operator<List<String>> {
     return OPERATOR.equals(afterKey.substring(0, OPERATOR.length()))
         && afterKey.charAt(OPERATOR.length()) == '('
         && afterKey.substring(OPERATOR.length() + 1).contains(")");
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    return this == o || o instanceof InOperator;
-  }
-
-  @Override
-  public int hashCode() {
-    return InOperator.class.hashCode();
   }
 
 }

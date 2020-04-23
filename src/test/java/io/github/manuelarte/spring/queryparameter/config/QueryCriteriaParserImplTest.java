@@ -34,22 +34,22 @@ public class QueryCriteriaParserImplTest {
   private static Stream<Arguments> parseCases() {
     return Stream.of(
         Arguments.of("key::value",
-            new QueryCriteria(new QueryCriterion("key", new EqualsOperator(), "value"))),
+            new QueryCriteria(new QueryCriterion<>("key", new EqualsOperator(), "value"))),
         Arguments.of("key1::value1;key2::value2",
-            new QueryCriteria(new QueryCriterion("key1", new EqualsOperator(), "value1"),
+            new QueryCriteria(new QueryCriterion<>("key1", new EqualsOperator(), "value1"),
                 new OtherCriteria(BooleanOperator.AND,
                     new QueryCriteria(
-                        new QueryCriterion("key2", new EqualsOperator(), "value2"))))),
+                        new QueryCriterion<>("key2", new EqualsOperator(), "value2"))))),
         Arguments.of("key1::value1|key2::value2",
-            new QueryCriteria(new QueryCriterion("key1", new EqualsOperator(), "value1"),
+            new QueryCriteria(new QueryCriterion<>("key1", new EqualsOperator(), "value1"),
                 new OtherCriteria(BooleanOperator.OR,
                     new QueryCriteria(
-                        new QueryCriterion("key2", new EqualsOperator(), "value2"))))),
+                        new QueryCriterion<>("key2", new EqualsOperator(), "value2"))))),
         Arguments.of("key1:<value1;key2:>value2",
-            new QueryCriteria(new QueryCriterion("key1", new LowerThanOperator(), "value1"),
+            new QueryCriteria(new QueryCriterion<>("key1", new LowerThanOperator(), "value1"),
                 new OtherCriteria(BooleanOperator.AND,
                     new QueryCriteria(
-                        new QueryCriterion("key2", new GreaterThanOperator(), "value2")))))
+                        new QueryCriterion<>("key2", new GreaterThanOperator(), "value2")))))
     );
   }
 
@@ -58,7 +58,7 @@ public class QueryCriteriaParserImplTest {
     final String q = "key::value";
     final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
     final QueryCriteria parsed = parser.parse(q);
-    final QueryCriteria expected = new QueryCriteria(new QueryCriterion("key",
+    final QueryCriteria expected = new QueryCriteria(new QueryCriterion<>("key",
         new EqualsOperator(), "value"));
     assertEquals(expected, parsed);
   }
@@ -78,12 +78,12 @@ public class QueryCriteriaParserImplTest {
     final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = QueryCriteria.builder()
-        .criterion(new QueryCriterion("startDate", new LowerThanOrEqualsOperator(),
+        .criterion(new QueryCriterion<>("startDate", new LowerThanOrEqualsOperator(),
             "2020-04-12T21:16:01.870+02:00"))
-        .and(new QueryCriterion("startDate", new GreaterThanOperator(),
+        .and(new QueryCriterion<>("startDate", new GreaterThanOperator(),
             "2020-02-12T21:16:01.871+01:00"))
-        .and(new QueryCriterion("sport", new EqualsOperator(), "FOOTBALL"))
-        .or(new QueryCriterion("sport", new EqualsOperator(), "FUTSAL"))
+        .and(new QueryCriterion<>("sport", new EqualsOperator(), "FOOTBALL"))
+        .or(new QueryCriterion<>("sport", new EqualsOperator(), "FUTSAL"))
         .build();
     assertEquals(expected, parsed);
   }
@@ -95,7 +95,7 @@ public class QueryCriteriaParserImplTest {
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = QueryCriteria.builder()
         .criterion(
-            new QueryCriterion("sport", new InOperator(), Arrays.asList("FOOTBALL", "FUTSAL")))
+            new QueryCriterion<>("sport", new InOperator(), Arrays.asList("FOOTBALL", "FUTSAL")))
         .build();
     assertEquals(expected, parsed);
   }
@@ -108,11 +108,11 @@ public class QueryCriteriaParserImplTest {
     final QueryCriteriaParser parser = new QueryCriteriaParserImpl(getAllOperators());
     final QueryCriteria parsed = parser.parse(q);
     final QueryCriteria expected = QueryCriteria.builder()
-        .criterion(new QueryCriterion("startDate", new LowerThanOrEqualsOperator(),
+        .criterion(new QueryCriterion<>("startDate", new LowerThanOrEqualsOperator(),
             "2020-04-12T21:16:01.870+02:00"))
-        .and(new QueryCriterion("startDate", new GreaterThanOperator(),
+        .and(new QueryCriterion<>("startDate", new GreaterThanOperator(),
             "2020-02-12T21:16:01.871+01:00"))
-        .and(new QueryCriterion("sport", new InOperator(), Arrays.asList("FOOTBALL", "FUTSAL")))
+        .and(new QueryCriterion<>("sport", new InOperator(), Arrays.asList("FOOTBALL", "FUTSAL")))
         .build();
     assertEquals(expected, parsed);
   }

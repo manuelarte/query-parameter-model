@@ -26,7 +26,7 @@ public class ClassFieldTransformerImplTest {
 
   @Autowired
   @Qualifier(("defaultTypeTransformer"))
-  private ClassFieldTransformerImpl classFieldTransformer;
+  private ClassFieldTransformerImpl<Object> classFieldTransformer;
 
   @Test
   void testStringConversion() {
@@ -84,7 +84,7 @@ public class ClassFieldTransformerImplTest {
   public enum Gender {
     MALE,
     FEMALE,
-    PREFER_NOT_TO_SAY;
+    PREFER_NOT_TO_SAY
   }
 
   public static class ExampleEntity {

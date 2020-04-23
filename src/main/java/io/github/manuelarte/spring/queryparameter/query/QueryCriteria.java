@@ -3,11 +3,8 @@ package io.github.manuelarte.spring.queryparameter.query;
 import com.google.common.base.Preconditions;
 import io.github.manuelarte.spring.queryparameter.operators.Operator;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Spliterator;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import lombok.val;
@@ -109,7 +106,7 @@ public final class QueryCriteria implements Iterable<QueryCriterion<Object>> {
      * @param criterion The criterion to apply.
      * @return the builder.
      */
-    public QueryCriteriaBuilder and(final QueryCriterion criterion) {
+    public QueryCriteriaBuilder and(final QueryCriterion<?> criterion) {
       if (this.other == null) {
         return other(new OtherCriteria(BooleanOperator.AND, new QueryCriteria(criterion)));
       } else {
@@ -124,7 +121,7 @@ public final class QueryCriteria implements Iterable<QueryCriterion<Object>> {
      * @param criterion The criterion to apply.
      * @return the builder.
      */
-    public QueryCriteriaBuilder or(final QueryCriterion criterion) {
+    public QueryCriteriaBuilder or(final QueryCriterion<?> criterion) {
       if (this.other == null) {
         return other(new OtherCriteria(BooleanOperator.OR, new QueryCriteria(criterion)));
       } else {
