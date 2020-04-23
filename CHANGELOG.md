@@ -8,14 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+
+
+## [0.0.2] - 2020-04-23
+
+### Added
+
 - Added query parameter constraints to add in entities NotNull and Null.
 - Added not operator for equals, lower than, lower than or equals, greater than, greater than or equals, in.
 
-### Changed
-
-### Removed
-
-## [0.0.1] - 2020-17-04
+## [0.0.1] - 2020-04-17
 
 ### Added
 
